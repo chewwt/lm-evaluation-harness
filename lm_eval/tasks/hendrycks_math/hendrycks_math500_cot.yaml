@@ -1,0 +1,7 @@
+include: hendrycks_math_algebra.yaml
+task: hendrycks_math500_cot
+dataset_name: default
+dataset_path: HuggingFaceH4/MATH-500
+training_split: null
+test_split: test
+doc_to_text: "{{problem}}\n\nLet's think step by step, and put the final answer inside \\boxed{}."

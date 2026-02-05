@@ -17,14 +17,27 @@ def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
 
 def process_results(doc: dict, results: List[str]) -> Dict[str, int]:
     retval = 0
-    indices = [pos for pos, char in enumerate(results[0]) if char == "$"]
-    if len(indices) <= 1:
-        answer = results[0]
-    else:
-        answer = results[0][indices[0] + 1 : indices[-1]]
+    # indices = [pos for pos, char in enumerate(results[0]) if char == "$"]
+    # if len(indices) <= 1:
+    #     answer = results[0]
+    # else:
+    #     answer = results[0][indices[0] + 1 : indices[-1]]
 
-    if is_equiv(answer, remove_boxed(last_boxed_only_string(doc["solution"]))):
-        retval = 1
+    # don't filter by $ cos some answers use \[ \] instead
+    answer = results[0]
+
+    # print('in_proc_res')
+
+    ans_boxed = last_boxed_only_string(answer)
+    if ans_boxed is not None:
+        ans_proc = remove_boxed(ans_boxed)
+
+        if is_equiv(ans_proc, remove_boxed(last_boxed_only_string(doc["solution"]))):
+            retval = 1
+
+    #     print(ans_proc, remove_boxed(last_boxed_only_string(doc["solution"])), retval)
+    # else:
+    #     print("cannot get ans_boxed", answer)
 
     results = {
         "exact_match": retval,

@@ -1,0 +1,19 @@
+include: hendrycks_math_algebra.yaml
+task: hendrycks_math500_cot_base
+dataset_name: default
+dataset_path: HuggingFaceH4/MATH-500
+training_split: null
+test_split: test
+doc_to_text: "Solve the following math problem efficiently and clearly:\n\n- For simple problems (2 steps or fewer):\nProvide a concise solution with minimal explanation.\n\n- For complex problems (3 steps or more):\nUse this step-by-step format:\n\n## Step 1: [Concise description]\n[Brief explanation and calculations]\n\n## Step 2: [Concise description]\n[Brief explanation and calculations]\n\n...\n\nRegardless of the approach, always conclude with:\n\nTherefore, the final answer is: $\\boxed{answer}$.\n\nWhere [answer] is just the final number or expression that solves the problem.\n\nProblem: {{problem}}\n\nSolution:\nLet's reason step by step. "
+generation_kwargs:
+  until:
+    - "Problem:"
+  do_sample: false
+  temperature: 0
+  max_new_tokens: 512
+# filter_list:
+#   - name: "strict-match"
+#     filter:
+#       - function: "regex"
+#         regex_pattern: "\\\\boxed\\{([^}]*)\\}"
+#       - function: "take_first"  

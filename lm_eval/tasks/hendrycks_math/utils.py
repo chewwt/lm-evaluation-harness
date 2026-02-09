@@ -8,11 +8,28 @@ def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
         out_doc = {
             "problem": doc["problem"],
             "solution": doc["solution"],
-            "answer": remove_boxed(last_boxed_only_string(doc["solution"])),
+            "answer": doc["answer"],
         }
         return out_doc
 
     return dataset.map(_process_doc)
+
+
+def process_results_wo_boxed(doc: dict, results: List[str]) -> Dict[str, int]:
+    retval = 0
+
+    answer = results[0]
+
+    if len(answer) > 0 and (answer[0] == answer[-1] == "$"):
+        answer = answer[1:-1]
+
+    if is_equiv(answer, doc["answer"]):
+        retval = 1
+
+    results = {
+        "exact_match": retval,
+    }
+    return results
 
 
 def process_results(doc: dict, results: List[str]) -> Dict[str, int]:

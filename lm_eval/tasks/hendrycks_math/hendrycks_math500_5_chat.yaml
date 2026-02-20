@@ -1,0 +1,32 @@
+task: hendrycks_math500_5_chat
+dataset_name: default
+dataset_path: HuggingFaceH4/MATH-500
+process_docs: !function utils.process_docs
+output_type: generate_until
+training_split: null
+test_split: test
+process_results: !function utils.process_results_wo_boxed
+doc_to_text: "Solve the problem.\n\nOutput ONLY the final answer.\n\nProblem:\n{{problem}}"
+gen_prefix: "Final answer:\n"
+doc_to_target: "{{answer}}"
+generation_kwargs:
+  until:
+    - "Problem:"
+    - "\n\n"
+  do_sample: false
+  temperature: 0
+  max_new_tokens: 512
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+# filter_list:
+#   - name: "flexible-extract"
+#     filter:
+#       - function: "regex"
+#         group_select: -1
+#         regex_pattern: "((?<=Final answer: )(.*)(?=.)|(?<=Final Answer: )(.*)(?=.)|(?<=Final answer:\n)(.*)(?=.)|(?<=Final Answer:\n)(.*)(?=.)|(?<=Final answer:\\*\\*)(.*)(?=.)|(?<=Final Answer:\\*\\*)(.*)(?=.))"
+#       - function: "take_first"
+metadata:
+  version: 1.0
+

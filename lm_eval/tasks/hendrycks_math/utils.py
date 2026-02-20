@@ -20,8 +20,15 @@ def process_results_wo_boxed(doc: dict, results: List[str]) -> Dict[str, int]:
 
     answer = results[0]
 
-    if len(answer) > 0 and (answer[0] == answer[-1] == "$"):
+    if len(answer) > 1 and (answer[:2] == answer[-2:] == "$$"):
+        answer = answer[2:-2]
+    elif len(answer) > 0 and (answer[0] == answer[-1] == "$"):
         answer = answer[1:-1]
+
+    # don't penalize if boxed
+    ans_boxed = last_boxed_only_string(answer)
+    if ans_boxed is not None:
+        answer = remove_boxed(ans_boxed)
 
     if is_equiv(answer, doc["answer"]):
         retval = 1

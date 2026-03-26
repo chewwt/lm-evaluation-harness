@@ -8,5 +8,8 @@ gen_prefix: "Here is a solution to this programming problem:\n```python\n"
 num_fewshot: 0
 generation_kwargs:
   max_gen_toks: 1024
-  until: []
+  until:
+    - "```"
+    - "```\n"
+    - "```\n\n"
   do_sample: false

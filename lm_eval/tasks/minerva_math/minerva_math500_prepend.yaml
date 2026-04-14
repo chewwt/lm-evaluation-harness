@@ -1,0 +1,7 @@
+include: minerva_math_algebra.yaml
+task: minerva_math500_prepend
+dataset_name: default
+dataset_path: HuggingFaceH4/MATH-500
+training_split: null
+test_split: test
+doc_to_text: !function utils_prepend.doc_to_text
